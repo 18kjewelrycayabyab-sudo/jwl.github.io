@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>DNA Mismatch Repair Simulation</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -87,15 +87,6 @@
         <p id="progressText">Scene 1 of 14</p>
       </div>
 
-      <div class="navigation">
-        <button class="secondary-btn" id="previousBtn" onclick="previousScene()">
-          ← Previous
-        </button>
-        <button class="primary-btn" id="nextBtn" onclick="nextScene()">
-          Next Scene →
-        </button>
-      </div>
-
     </section>
 
     <section id="sceneMenu" class="hidden">
@@ -108,6 +99,17 @@
     </section>
 
   </main>
+
+  <div id="simDock" class="simulation-dock hidden" aria-hidden="true">
+    <div class="navigation">
+      <button class="secondary-btn" id="previousBtn" onclick="previousScene()">
+        ← Previous
+      </button>
+      <button class="primary-btn" id="nextBtn" onclick="nextScene()">
+        Next Scene →
+      </button>
+    </div>
+  </div>
 
   <footer>
     DNA Mismatch Repair | Interactive Learning Simulation

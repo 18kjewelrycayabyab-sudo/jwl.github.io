@@ -1139,6 +1139,16 @@ function switchView(showId) {
       el.classList.remove("view-enter", "view-leave");
     }
   });
+
+  const dock = document.getElementById("simDock");
+  const simulationOpen = showId === "simulation";
+
+  if (dock) {
+    dock.classList.toggle("hidden", !simulationOpen);
+    dock.setAttribute("aria-hidden", simulationOpen ? "false" : "true");
+  }
+
+  document.body.classList.toggle("simulation-active", simulationOpen);
 }
 
 function startSimulation() {

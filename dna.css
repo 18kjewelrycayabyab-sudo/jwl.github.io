@@ -824,6 +824,66 @@ button {
   margin-top: 28px;
 }
 
+/* Dock Previous / Next — outside #simulation so fixed = viewport */
+body.simulation-active #simulation:not(.hidden) {
+  padding-bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+}
+
+.simulation-dock {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.simulation-dock:not(.hidden) {
+  pointer-events: auto;
+}
+
+.simulation-dock .navigation {
+  margin: 0;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 10px;
+  padding:
+    12px
+    max(16px, env(safe-area-inset-left, 16px))
+    calc(12px + env(safe-area-inset-bottom, 0px))
+    max(16px, env(safe-area-inset-right, 16px));
+  background: rgba(255, 251, 253, 0.96);
+  backdrop-filter: blur(12px);
+  border-top: 2px solid rgba(245, 176, 203, 0.35);
+  box-shadow: 0 -8px 32px rgba(217, 122, 168, 0.16);
+}
+
+.simulation-dock .navigation .primary-btn,
+.simulation-dock .navigation .secondary-btn {
+  flex: 1;
+  min-height: 48px;
+  max-width: none;
+  text-align: center;
+}
+
+body.simulation-active footer {
+  padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+}
+
+@media (min-width: 751px) {
+  .simulation-dock .navigation {
+    justify-content: center;
+    gap: 14px;
+    padding-left: max(24px, calc((100vw - min(1100px, 90vw)) / 2 + 16px));
+    padding-right: max(24px, calc((100vw - min(1100px, 90vw)) / 2 + 16px));
+  }
+
+  .simulation-dock .navigation .primary-btn,
+  .simulation-dock .navigation .secondary-btn {
+    flex: 0 1 320px;
+  }
+}
+
 /* =====================================================
    SCENE MENU
 ===================================================== */
@@ -959,69 +1019,307 @@ footer {
 }
 
 /* =====================================================
-   RESPONSIVE
+   RESPONSIVE — layout only; colors & motion unchanged
 ===================================================== */
 
-@media (max-width: 750px) {
-  .home-screen,
-  .simulation-grid {
-    grid-template-columns: 1fr;
+@media (max-width: 900px) {
+  .container {
+    width: min(1100px, 92%);
+    margin: 36px auto;
   }
 
   .home-screen {
-    padding-top: 20px;
+    gap: 32px;
+  }
+
+  .simulation-grid {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 750px) {
+  body {
+    padding-left: env(safe-area-inset-left, 0);
+    padding-right: env(safe-area-inset-right, 0);
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    padding:
+      14px
+      max(16px, env(safe-area-inset-right, 16px))
+      14px
+      max(16px, env(safe-area-inset-left, 16px));
+    gap: 12px;
+    align-items: center;
+  }
+
+  .logo {
+    flex: 1;
+    min-width: 0;
+    font-size: 13px;
+    line-height: 1.35;
+  }
+
+  .logo span {
+    font-size: 1.35em;
+  }
+
+  .menu-btn {
+    flex-shrink: 0;
+    min-height: 44px;
+    padding: 10px 16px;
+  }
+
+  .container {
+    width: calc(100% - 32px);
+    max-width: 100%;
+    margin: 16px auto 24px;
+  }
+
+  .container::before,
+  .container::after {
+    display: none;
+  }
+
+  body::before,
+  body::after {
+    opacity: 0.32;
+  }
+
+  .home-screen {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    min-height: auto;
+    padding: 4px 0 8px;
+  }
+
+  .home-screen .intro {
+    order: 1;
+    text-align: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .home-screen .dna-card {
+    order: 2;
+    width: 100%;
+  }
+
+  .intro > p:not(.eyebrow),
+  .scene-heading > p:not(.eyebrow) {
+    max-width: 100%;
+    margin-bottom: 20px;
+    font-size: 1rem;
+  }
+
+  .home-screen .primary-btn {
+    width: 100%;
+    max-width: 360px;
+    min-height: 48px;
+  }
+
+  #sceneMenu {
+    text-align: center;
+  }
+
+  #sceneMenu .eyebrow {
+    margin-bottom: 8px;
+  }
+
+  #sceneMenu h1 {
+    margin-bottom: 4px;
+  }
+
+  #sceneMenu .back-home {
+    width: 100%;
+    max-width: 360px;
+    min-height: 48px;
+    margin: 24px auto 0;
+    display: block;
+  }
+
+  .scene-heading {
+    margin-bottom: 18px;
+  }
+
+  .scene-heading h1 {
+    font-size: clamp(26px, 7vw, 34px);
+    line-height: 1.22;
+  }
+
+  .simulation-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .simulation-grid .dna-card,
+  .simulation-grid .information-card {
+    transform: none;
+  }
+
+  .dna-card {
+    padding: 14px;
+    border-radius: 22px;
+  }
+
+  .dna-stage {
+    height: clamp(260px, 58vw, 340px);
+    border-radius: 16px 20px 18px 14px;
+  }
+
+  .animation-caption {
+    font-size: 19px;
+    margin-top: 10px;
+  }
+
+  .animation-controls {
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .animation-controls .control-btn {
+    flex: 1 1 calc(50% - 4px);
+    min-height: 44px;
+    min-width: 0;
+  }
+
+  .information-card {
+    padding: 20px 18px;
+  }
+
+  .information-card h2 {
+    font-size: 26px;
+  }
+
+  .keypoint {
+    transform: none;
+  }
+
+  .sequence-box {
+    font-size: 11.5px;
+    padding: 14px 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .progress-area {
+    margin-top: 22px;
+  }
+
+  .progress-track {
+    height: 11px;
+  }
+
+  body.simulation-active #simulation:not(.hidden) {
+    padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+  }
+
+  #simulation:not(.hidden) .progress-area {
+    margin-bottom: 8px;
   }
 
   .scene-list {
     grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .scene-list .scene-link:nth-child(odd),
+  .scene-list .scene-link:nth-child(even) {
+    transform: none;
+  }
+
+  .scene-link {
+    padding: 16px 18px;
+    min-height: 44px;
+  }
+
+  footer {
+    padding:
+      20px 16px
+      calc(20px + env(safe-area-inset-bottom, 0));
+    line-height: 1.55;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 750px) and (orientation: landscape) {
+  .home-screen {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .home-screen .intro {
+    order: unset;
+    text-align: left;
+    align-items: flex-start;
+  }
+
+  .home-screen .dna-card {
+    order: unset;
+  }
+
+  .home-screen .primary-btn {
+    width: auto;
+    max-width: none;
   }
 
   .dna-stage {
-    height: 380px;
+    height: clamp(200px, 45vh, 260px);
   }
 
-  .topbar {
-    padding: 16px 5%;
-  }
-
-  .container {
-    margin: 30px auto;
-  }
-
-  .information-card {
-    padding: 22px;
-  }
-
-  .scene-heading h1 {
-    font-size: 30px;
-  }
-
-  .dna-card {
-    padding: 18px;
-    border-radius: 22px;
+  .simulation-dock .navigation {
+    gap: 8px;
   }
 }
 
 @media (max-width: 400px) {
+  .container {
+    width: calc(100% - 24px);
+    margin: 12px auto 20px;
+  }
+
+  .topbar {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
   .logo {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .menu-btn {
-    padding: 9px 14px;
+    padding: 9px 12px;
     font-size: 12px;
   }
 
-  .intro h1 {
-    font-size: 34px;
+  .intro h1,
+  #sceneMenu h1 {
+    font-size: clamp(28px, 9vw, 34px);
+  }
+
+  .eyebrow {
+    font-size: 1.15rem;
   }
 
   .dna-stage {
-    height: 270px;
+    height: clamp(230px, 62vw, 280px);
   }
 
-  .navigation button {
-    padding: 11px 15px;
-    font-size: 12px;
+  .information-card h2 {
+    font-size: 22px;
+  }
+
+  .home-screen .primary-btn,
+  .animation-controls .control-btn {
+    font-size: 13px;
+    padding: 12px 16px;
   }
 }
