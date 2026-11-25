@@ -895,9 +895,11 @@ const dnaModels = {};
 function createDNA(elementId) {
   const container = document.getElementById(elementId);
 
-  if (!container || dnaModels[elementId]) return;
+  if (!container) return Promise.resolve(null);
 
-  loadThree().then(() => {
+  if (dnaModels[elementId]) return Promise.resolve(dnaModels[elementId]);
+
+  return loadThree().then(() => {
     if (!container.isConnected || dnaModels[elementId]) return;
 
     const scene = new THREE.Scene();
@@ -1020,6 +1022,9 @@ function createDNA(elementId) {
 
     // Zoom
     canvas.addEventListener("wheel", event => {
+      // /extra uses the page scroll; don't trap the wheel over the model.
+      if (elementId === "extraDNA") return;
+
       event.preventDefault();
 
       data.zoom += event.deltaY * 0.006;
@@ -1031,12 +1036,13 @@ function createDNA(elementId) {
       );
 
       camera.position.z = data.zoom;
-    }, { passive: false });
+    }, { passive: elementId === "extraDNA" });
 
     data.animTime = 0;
 
     // Render loop
-    const homeViewer = elementId === "homeDNA";
+    const homeViewer =
+      elementId === "homeDNA" || elementId === "extraDNA";
 
     function animate() {
       data.frame = requestAnimationFrame(animate);
@@ -1064,11 +1070,15 @@ function createDNA(elementId) {
     // Create initial illustration
     updateDNA(elementId);
 
+    return dnaModels[elementId];
+
   }).catch(error => {
     console.error(error);
 
     container.innerHTML =
       "<p style='text-align:center;padding:30px;color:#bd6891'>Unable to load 3D illustration. Check your internet connection.</p>";
+
+    return null;
   });
 }
 
@@ -1117,8 +1127,28 @@ function updateDNA(elementId) {
    8. INITIALIZE BOTH DNA VIEWERS
 ========================================================= */
 
-createDNA("homeDNA");
-createDNA("sceneDNA");
+if (document.getElementById("homeDNA")) {
+  createDNA("homeDNA");
+}
+
+if (document.getElementById("sceneDNA")) {
+  createDNA("sceneDNA");
+}
+
+window.DNASimulation = {
+  createDNA,
+  updateDNA,
+  getScenes() {
+    return scenes;
+  },
+  setScene(sceneIndex, elementId) {
+    currentScene = sceneIndex;
+    updateDNA(elementId);
+  },
+  getViewer(elementId) {
+    return dnaModels[elementId] || null;
+  }
+};
 
 
 /* =========================================================

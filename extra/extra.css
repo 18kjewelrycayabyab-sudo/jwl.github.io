@@ -1,0 +1,583 @@
+/* /extra — same pastel pink system as dna.html, one full screen per scene */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --pink: #f5b0cb;
+  --pink-light: #fff5f8;
+  --pink-soft: #ffd9e8;
+  --pink-dark: #d97aa8;
+  --pink-deep: #c45f8f;
+  --blue: #9fd4ea;
+  --blue-light: #edf8fc;
+  --blue-dark: #6aafc9;
+  --dark: #4a4349;
+  --muted: #7a7279;
+  --white: #ffffff;
+  --page: #fff9fb;
+  --shadow-soft: 0 6px 22px rgba(217, 122, 168, 0.14);
+  --shadow-card: 0 14px 36px rgba(74, 67, 73, 0.07);
+  --ease: cubic-bezier(0.34, 1.25, 0.55, 1);
+  --header: 64px;
+  --dock: 92px;
+}
+
+html {
+  height: 100%;
+  scroll-snap-type: y mandatory;
+}
+
+html.no-snap {
+  scroll-snap-type: none;
+}
+
+body.extra-page {
+  min-height: 100%;
+  font-family: "Quicksand", "Segoe UI", sans-serif;
+  color: var(--dark);
+  background: var(--page);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+body.extra-page.is-menu-open {
+  overflow: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.blob {
+  position: fixed;
+  border-radius: 42% 58% 55% 45% / 48% 42% 58% 52%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.55;
+}
+
+.blob-pink {
+  width: min(480px, 88vw);
+  height: min(440px, 82vw);
+  top: -100px;
+  left: -120px;
+  background: var(--pink-soft);
+  animation: blob-float 14s ease-in-out infinite;
+}
+
+.blob-blue {
+  width: min(380px, 75vw);
+  height: min(360px, 72vw);
+  bottom: -60px;
+  right: -90px;
+  background: var(--blue-light);
+  animation: blob-float 18s ease-in-out infinite reverse;
+}
+
+@keyframes blob-float {
+  0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+  33% { transform: translate(42px, -18px) rotate(12deg) scale(1.1); }
+  66% { transform: translate(-28px, 36px) rotate(-9deg) scale(0.96); }
+  100% { transform: translate(20px, 24px) rotate(6deg) scale(1.06); }
+}
+
+@keyframes caption-sway {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0.4; transform: scale(1) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1.35) rotate(180deg); }
+}
+
+@keyframes wiggle-title {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg) scale(1.04); }
+}
+
+/* Header */
+.extra-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: var(--header);
+  padding:
+    max(10px, env(safe-area-inset-top))
+    max(16px, env(safe-area-inset-right))
+    10px
+    max(16px, env(safe-area-inset-left));
+  background: rgba(255, 251, 253, 0.94);
+  border-bottom: 2px solid rgba(245, 176, 203, 0.35);
+  box-shadow: 0 8px 24px rgba(217, 122, 168, 0.1);
+}
+
+.logo {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  font-size: 14px;
+}
+
+.logo span {
+  font-family: "Caveat", cursive;
+  font-size: 1.45rem;
+  color: var(--pink-deep);
+  margin: 0 4px;
+}
+
+.extra-count {
+  font-family: "Caveat", cursive;
+  font-size: 1.35rem;
+  color: var(--pink-deep);
+  animation: caption-sway 4s ease-in-out infinite;
+}
+
+.menu-btn,
+.control-btn,
+.secondary-btn {
+  padding: 10px 16px;
+  min-height: 44px;
+  border-radius: 18px 22px 20px 16px;
+  background: var(--white);
+  border: 2px solid rgba(245, 176, 203, 0.45);
+  color: var(--dark);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.menu-btn:hover,
+.control-btn:hover,
+.secondary-btn:hover {
+  background: var(--pink-light);
+  transform: translateY(-2px) rotate(-0.4deg);
+}
+
+.secondary-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.primary-btn {
+  padding: 12px 18px;
+  min-height: 48px;
+  border-radius: 22px 26px 24px 20px;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--white);
+  background: var(--pink-dark);
+  box-shadow: 0 5px 0 rgba(196, 95, 143, 0.35);
+}
+
+.primary-btn:hover {
+  transform: translateY(-3px) rotate(1.5deg) scale(1.03);
+  background: var(--pink-deep);
+}
+
+/* Fixed 3D card — same language as the main simulation */
+.viewer-dock {
+  position: fixed;
+  z-index: 20;
+  top: calc(var(--header) + 16px);
+  left: max(16px, env(safe-area-inset-left));
+  width: min(44vw, 520px);
+  bottom: calc(var(--dock) + 16px);
+  display: flex;
+}
+
+.dna-card {
+  position: relative;
+  width: 100%;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid rgba(245, 176, 203, 0.4);
+  border-radius: 28px 32px 26px 30px;
+  background: var(--pink-light);
+  box-shadow: var(--shadow-card);
+  transform: rotate(-0.4deg);
+}
+
+.dna-card::before {
+  content: "✦ ♡";
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  color: var(--pink);
+  letter-spacing: 0.12em;
+  animation: sparkle 2.2s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.dna-stage {
+  position: relative;
+  flex: 1;
+  min-height: 180px;
+  border-radius: 20px 24px 22px 18px;
+  background: var(--white);
+  overflow: hidden;
+}
+
+.dna {
+  position: absolute;
+  inset: 0;
+}
+
+.dna canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  cursor: grab;
+  touch-action: none;
+}
+
+.dna canvas:active {
+  cursor: grabbing;
+}
+
+.animation-caption {
+  text-align: center;
+  font-family: "Caveat", cursive;
+  color: var(--pink-deep);
+  font-size: 22px;
+  margin-top: 8px;
+  animation: caption-sway 3.2s ease-in-out infinite;
+}
+
+.animation-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+/* Story panels */
+.snap-root {
+  position: relative;
+  z-index: 1;
+}
+
+.cine {
+  min-height: 100dvh;
+  height: 100dvh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+  align-items: flex-start;
+  padding:
+    calc(var(--header) + 20px)
+    max(20px, env(safe-area-inset-right))
+    calc(var(--dock) + 18px)
+    calc(min(44vw, 520px) + 36px);
+}
+
+.story {
+  width: min(640px, 100%);
+  max-height: 100%;
+  overflow: auto;
+  padding-right: 6px;
+}
+
+.eyebrow {
+  font-family: "Caveat", cursive;
+  font-size: 1.35rem;
+  color: var(--pink-deep);
+  margin-bottom: 6px;
+}
+
+.story h1 {
+  font-size: clamp(28px, 3.6vw, 42px);
+  line-height: 1.12;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.story h1 span {
+  font-family: "Caveat", cursive;
+  color: var(--pink-dark);
+  display: inline-block;
+  animation: wiggle-title 3.5s ease-in-out infinite;
+}
+
+.lede {
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.6;
+  margin-bottom: 12px;
+  max-width: 38rem;
+}
+
+.info-card {
+  padding: 16px 18px 14px;
+  border: 2px solid rgba(245, 176, 203, 0.32);
+  border-radius: 22px 26px 24px 20px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: var(--shadow-card);
+  transform: rotate(0.35deg);
+}
+
+.info-card h2 {
+  font-family: "Caveat", cursive;
+  font-size: 26px;
+  color: var(--pink-deep);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.info-card > p {
+  color: var(--muted);
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.keypoint {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 16px 14px 18px 12px;
+  background: var(--pink-light);
+  border-left: 5px solid var(--pink);
+  transform: rotate(-0.35deg);
+}
+
+.keypoint strong {
+  display: block;
+  font-family: "Caveat", cursive;
+  color: var(--pink-deep);
+  font-size: 1.15rem;
+  margin-bottom: 2px;
+}
+
+.keypoint p {
+  color: #554f58;
+  font-weight: 500;
+}
+
+.sequence-box {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 14px 16px 12px 18px;
+  background: #faf7fc;
+  border: 2px dashed rgba(217, 122, 168, 0.38);
+  font-family: "Consolas", "Monaco", monospace;
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+.cover-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.cover-actions a {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Scene menu */
+.scene-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(255, 245, 248, 0.72);
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+}
+
+.scene-overlay.hidden {
+  display: none;
+}
+
+.scene-sheet {
+  width: min(860px, 100%);
+  max-height: min(82dvh, 760px);
+  overflow: auto;
+  padding: 24px;
+  border-radius: 24px 28px 22px 26px;
+  background: var(--white);
+  border: 2px solid rgba(245, 176, 203, 0.4);
+  box-shadow: var(--shadow-card);
+}
+
+.scene-sheet h2 {
+  font-size: clamp(28px, 4vw, 40px);
+  margin-bottom: 14px;
+}
+
+.scene-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.scene-link {
+  text-align: left;
+  padding: 14px 16px;
+  background: var(--white);
+  border: 2px solid rgba(245, 176, 203, 0.38);
+  border-radius: 18px 22px 20px 16px;
+  color: var(--dark);
+}
+
+.scene-link:hover,
+.scene-link.is-active {
+  background: var(--pink-light);
+  border-color: rgba(245, 176, 203, 0.7);
+  transform: translateY(-2px) rotate(-0.4deg);
+}
+
+.scene-link strong,
+.scene-link small {
+  display: block;
+}
+
+.scene-link small {
+  color: var(--muted);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* Bottom dock — same idea as the main simulation */
+.extra-dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  padding:
+    10px
+    max(16px, env(safe-area-inset-right))
+    calc(10px + env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left));
+  background: rgba(255, 251, 253, 0.96);
+  border-top: 2px solid rgba(245, 176, 203, 0.35);
+  box-shadow: 0 -8px 32px rgba(217, 122, 168, 0.16);
+}
+
+.progress-track {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(245, 176, 203, 0.25);
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+#progressBar {
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--pink-dark);
+}
+
+.navigation {
+  display: flex;
+  gap: 10px;
+}
+
+.navigation .secondary-btn,
+.navigation .primary-btn {
+  flex: 1;
+}
+
+@media (min-width: 901px) {
+  .extra-dock .navigation {
+    margin-left: calc(min(44vw, 520px) + 20px);
+  }
+}
+
+@media (max-width: 900px) {
+  :root {
+    --header: 58px;
+    --dock: 96px;
+    --viewer: 34dvh;
+  }
+
+  .viewer-dock {
+    left: max(10px, env(safe-area-inset-left));
+    right: max(10px, env(safe-area-inset-right));
+    width: auto;
+    top: calc(var(--header) + 8px);
+    height: var(--viewer);
+    bottom: auto;
+  }
+
+  .dna-card {
+    transform: none;
+    padding: 10px;
+  }
+
+  .animation-caption {
+    font-size: 18px;
+    margin-top: 4px;
+  }
+
+  .animation-controls {
+    margin-top: 4px;
+  }
+
+  .control-btn {
+    min-height: 40px;
+    padding: 6px 12px;
+  }
+
+  .cine {
+    align-items: flex-start;
+    padding:
+      calc(var(--header) + var(--viewer) + 16px)
+      max(14px, env(safe-area-inset-right))
+      calc(var(--dock) + 12px)
+      max(14px, env(safe-area-inset-left));
+  }
+
+  .info-card,
+  .keypoint {
+    transform: none;
+  }
+
+  .scene-list {
+    grid-template-columns: 1fr;
+  }
+
+  .extra-count {
+    font-size: 1.15rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-snap-type: none;
+  }
+
+  .blob,
+  .extra-count,
+  .animation-caption,
+  .dna-card::before,
+  .story h1 span {
+    animation: none;
+  }
+}
