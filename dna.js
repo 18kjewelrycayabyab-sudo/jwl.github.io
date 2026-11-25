@@ -1033,16 +1033,27 @@ function createDNA(elementId) {
       camera.position.z = data.zoom;
     }, { passive: false });
 
+    data.animTime = 0;
+
     // Render loop
+    const homeViewer = elementId === "homeDNA";
+
     function animate() {
       data.frame = requestAnimationFrame(animate);
+      data.animTime += 0.016;
+
+      const t = data.animTime;
 
       if (
         data.model &&
         !data.paused &&
         !data.dragging
       ) {
-        data.model.rotation.y += 0.003;
+        data.model.rotation.y += homeViewer ? 0.008 : 0.005;
+        data.model.position.y = Math.sin(t * 1.35) * (homeViewer ? 0.18 : 0.12);
+        data.model.position.x = Math.cos(t * 0.85) * (homeViewer ? 0.08 : 0.05);
+        data.model.rotation.x = 0.12 + Math.sin(t * 1.1) * 0.12;
+        data.model.rotation.z = Math.sin(t * 0.75) * 0.08;
       }
 
       renderer.render(scene, camera);
@@ -1094,6 +1105,8 @@ function updateDNA(elementId) {
   data.model = buildDNA(data.scene, elementId);
 
   data.model.rotation.set(0.12, 0, 0);
+  data.model.position.set(0, 0, 0);
+  data.animTime = 0;
 
   data.zoom = 9.5;
   data.camera.position.set(0, 0, 9.5);
@@ -1112,10 +1125,24 @@ createDNA("sceneDNA");
    9. START SIMULATION
 ========================================================= */
 
+function switchView(showId) {
+  const ids = ["home", "simulation", "sceneMenu"];
+
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+
+    if (id === showId) {
+      el.classList.remove("hidden", "view-leave");
+      el.classList.add("view-enter");
+    } else {
+      el.classList.add("hidden");
+      el.classList.remove("view-enter", "view-leave");
+    }
+  });
+}
+
 function startSimulation() {
-  document.getElementById("home").classList.add("hidden");
-  document.getElementById("sceneMenu").classList.add("hidden");
-  document.getElementById("simulation").classList.remove("hidden");
+  switchView("simulation");
 
   currentScene = 0;
 
@@ -1174,6 +1201,21 @@ function displayScene() {
   updateDNA("sceneDNA");
 
   replayAnimation();
+
+  const grid = document.querySelector(".simulation-grid");
+  const infoCard = document.querySelector(".information-card");
+
+  if (grid) {
+    grid.classList.remove("scene-enter");
+    void grid.offsetWidth;
+    grid.classList.add("scene-enter");
+  }
+
+  if (infoCard) {
+    infoCard.classList.remove("content-swap");
+    void infoCard.offsetWidth;
+    infoCard.classList.add("content-swap");
+  }
 }
 
 
@@ -1226,9 +1268,11 @@ function replayAnimation() {
   data.paused = false;
 
   data.model.rotation.set(0.12, 0, 0);
+  data.model.position.set(0, 0, 0);
 
   data.zoom = 9.5;
   data.camera.position.set(0, 0, 9.5);
+  data.animTime = 0;
 
   document.getElementById("pauseBtn").textContent =
     "Pause";
@@ -1240,9 +1284,7 @@ function replayAnimation() {
 ========================================================= */
 
 function showMenu() {
-  document.getElementById("home").classList.add("hidden");
-  document.getElementById("simulation").classList.add("hidden");
-  document.getElementById("sceneMenu").classList.remove("hidden");
+  switchView("sceneMenu");
 
   const list = document.getElementById("sceneList");
 
@@ -1266,8 +1308,7 @@ function showMenu() {
     button.addEventListener("click", () => {
       currentScene = index;
 
-      document.getElementById("sceneMenu").classList.add("hidden");
-      document.getElementById("simulation").classList.remove("hidden");
+      switchView("simulation");
 
       displayScene();
     });
@@ -1282,7 +1323,5 @@ function showMenu() {
 ========================================================= */
 
 function goHome() {
-  document.getElementById("sceneMenu").classList.add("hidden");
-  document.getElementById("simulation").classList.add("hidden");
-  document.getElementById("home").classList.remove("hidden");
+  switchView("home");
 }
