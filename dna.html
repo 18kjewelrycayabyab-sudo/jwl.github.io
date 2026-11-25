@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DNA Mismatch Repair Simulation</title>
+  <link rel="stylesheet" href="dna.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="logo">DNA <span>MMR</span> SIMULATION</div>
+    <button class="menu-btn" onclick="showMenu()">All Scenes</button>
+  </header>
+
+  <main class="container">
+
+    <section id="home" class="home-screen">
+      <div class="intro">
+        <p class="eyebrow">INTERACTIVE BIOLOGY SIMULATION</p>
+        <h1>DNA Mismatch <span>Repair</span></h1>
+        <p>
+          Explore how DNA replicates, how mismatches happen,
+          and how the mismatch repair system corrects errors.
+        </p>
+        <button class="primary-btn" onclick="startSimulation()">
+          Start Simulation →
+        </button>
+      </div>
+
+      <div class="dna-card">
+        <div class="dna-stage">
+          <div class="dna" id="homeDNA"></div>
+        </div>
+        <p class="animation-caption">A rotating DNA double helix</p>
+      </div>
+    </section>
+
+    <section id="simulation" class="hidden">
+
+      <div class="scene-heading">
+        <p class="eyebrow" id="sceneNumber">SCENE 01 OF 14</p>
+        <h1 id="sceneTitle">Introduction to DNA Mismatch Repair</h1>
+        <p id="sceneDescription"></p>
+      </div>
+
+      <div class="simulation-grid">
+
+        <div class="dna-card">
+          <div class="dna-stage">
+            <div class="dna" id="sceneDNA"></div>
+          </div>
+          <p class="animation-caption">3D-style animated DNA model</p>
+
+          <div class="animation-controls">
+            <button class="control-btn" id="pauseBtn" onclick="toggleAnimation()">
+              Pause
+            </button>
+            <button class="control-btn" onclick="replayAnimation()">
+              Replay
+            </button>
+          </div>
+        </div>
+
+        <div class="information-card">
+          <h2>What's happening?</h2>
+          <p id="sceneExplanation"></p>
+
+          <div class="keypoint">
+            <strong>KEY POINT</strong>
+            <p id="sceneKeypoint"></p>
+          </div>
+
+          <div id="sequenceBox" class="sequence-box hidden"></div>
+        </div>
+
+      </div>
+
+      <div class="progress-area">
+        <div class="progress-track">
+          <div id="progressBar"></div>
+        </div>
+        <p id="progressText">Scene 1 of 14</p>
+      </div>
+
+      <div class="navigation">
+        <button class="secondary-btn" id="previousBtn" onclick="previousScene()">
+          ← Previous
+        </button>
+        <button class="primary-btn" id="nextBtn" onclick="nextScene()">
+          Next Scene →
+        </button>
+      </div>
+
+    </section>
+
+    <section id="sceneMenu" class="hidden">
+      <p class="eyebrow">SIMULATION CONTENTS</p>
+      <h1>Choose a Scene</h1>
+      <div id="sceneList" class="scene-list"></div>
+      <button class="secondary-btn back-home" onclick="goHome()">
+        ← Back to Home
+      </button>
+    </section>
+
+  </main>
+
+  <footer>
+    DNA Mismatch Repair | Interactive Learning Simulation
+  </footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r160/three.min.js"></script>
+<script src="dna.js"></script>
+</body>
+</html> 

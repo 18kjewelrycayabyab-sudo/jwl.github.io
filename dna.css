@@ -1,0 +1,714 @@
+
+/* =====================================================
+   DNA MISMATCH REPAIR SIMULATION
+   COMPLETE CSS
+   PASTEL PINK + BABY BLUE THEME
+===================================================== */
+
+
+/* =====================================================
+   1. GLOBAL SETTINGS
+===================================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --pink: #f3a4c4;
+  --pink-light: #ffe5ef;
+  --pink-dark: #d779a2;
+
+  --blue: #75c9ed;
+  --blue-light: #e2f6ff;
+  --blue-dark: #368fb7;
+
+  --dark: #26364a;
+  --muted: #66768a;
+  --white: #ffffff;
+
+  --border: #e7e8f0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: var(--dark);
+
+  background:
+    radial-gradient(circle at 10% 10%, #ffe2ef, transparent 35%),
+    radial-gradient(circle at 90% 15%, #d9f4ff, transparent 35%),
+    linear-gradient(135deg, #fffaff, #f3faff);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+}
+
+
+/* =====================================================
+   2. TOP NAVIGATION
+===================================================== */
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 20px 7%;
+
+  background: rgba(255,255,255,.75);
+  border-bottom: 1px solid #f1dce8;
+
+  backdrop-filter: blur(12px);
+
+  position: relative;
+  z-index: 10;
+}
+
+.logo {
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.logo span {
+  color: var(--pink-dark);
+}
+
+.menu-btn {
+  background: #fff;
+  border: 1px solid #efd6e3;
+
+  padding: 10px 18px;
+  border-radius: 25px;
+
+  color: var(--dark);
+  transition: .25s;
+}
+
+.menu-btn:hover {
+  background: var(--pink-light);
+  transform: translateY(-2px);
+}
+
+
+/* =====================================================
+   3. MAIN CONTAINER
+===================================================== */
+
+.container {
+  width: min(1100px, 90%);
+  margin: 45px auto;
+}
+
+.hidden {
+  display: none !important;
+}
+
+
+/* =====================================================
+   4. HOMEPAGE
+===================================================== */
+
+.home-screen {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  align-items: center;
+  gap: 35px;
+
+  min-height: 65vh;
+}
+
+.eyebrow {
+  color: #c36d96;
+
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: 3px;
+
+  margin-bottom: 14px;
+}
+
+.intro h1,
+.scene-heading h1,
+#sceneMenu h1 {
+  font-size: clamp(32px, 5vw, 55px);
+  line-height: 1.1;
+
+  margin-bottom: 20px;
+}
+
+.intro h1 span {
+  color: var(--pink-dark);
+}
+
+.intro > p:not(.eyebrow),
+.scene-heading > p:not(.eyebrow) {
+  color: var(--muted);
+
+  line-height: 1.8;
+  max-width: 550px;
+
+  margin-bottom: 25px;
+}
+
+
+/* =====================================================
+   5. BUTTONS
+===================================================== */
+
+.primary-btn {
+  padding: 13px 23px;
+  border-radius: 30px;
+
+  font-weight: 700;
+  color: #26364a;
+
+  background: linear-gradient(
+    100deg,
+    #f4a6c5,
+    #83d2ef
+  );
+
+  box-shadow: 0 8px 20px #d9a9c533;
+
+  transition: .25s;
+}
+
+.primary-btn:hover,
+.secondary-btn:hover,
+.control-btn:hover {
+  transform: translateY(-2px);
+}
+
+.secondary-btn,
+.control-btn {
+  padding: 12px 20px;
+  border-radius: 25px;
+
+  background: #fff;
+  border: 1px solid #eadce7;
+
+  color: var(--dark);
+  font-weight: 700;
+
+  transition: .25s;
+}
+
+.secondary-btn:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.control-btn:hover {
+  background: var(--blue-light);
+}
+
+
+/* =====================================================
+   6. DNA CARD — ALL SCENES
+===================================================== */
+
+.dna-card {
+  position: relative;
+
+  width: 100%;
+  min-width: 0;
+
+  padding: 20px;
+
+  border: 1px solid #e7e8f0;
+  border-radius: 28px;
+
+  background: linear-gradient(
+    145deg,
+    #e6f8ff,
+    #fff0f7
+  );
+
+  box-shadow: 0 18px 50px #7899b31c;
+
+  overflow: hidden;
+
+  transition: box-shadow .3s ease;
+}
+
+.dna-card:hover {
+  box-shadow: 0 20px 55px #7899b32b;
+}
+
+
+/* =====================================================
+   7. THREE.JS DNA VIEWER
+===================================================== */
+
+.dna-stage {
+  position: relative;
+
+  width: 100%;
+  height: 340px;
+
+  display: grid;
+  place-items: center;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,255,255,.7),
+      rgba(226,246,255,.25) 65%,
+      transparent 100%
+    );
+}
+
+/* THREE.JS CANVAS CONTAINER */
+
+.dna {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+}
+
+/* ACTUAL 3D CANVAS */
+
+.dna canvas {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  outline: none;
+
+  cursor: grab;
+  touch-action: none;
+}
+
+.dna canvas:active {
+  cursor: grabbing;
+}
+
+
+/* =====================================================
+   8. DNA ANIMATION CAPTION
+===================================================== */
+
+.animation-caption {
+  text-align: center;
+
+  color: #7a8a9c;
+  font-size: 13px;
+
+  margin: 10px 0;
+}
+
+
+/* =====================================================
+   9. DNA CONTROLS
+===================================================== */
+
+.animation-controls {
+  display: flex;
+  justify-content: center;
+
+  gap: 10px;
+  margin-top: 15px;
+}
+
+
+/* =====================================================
+   10. SCENE HEADING
+===================================================== */
+
+.scene-heading {
+  margin-bottom: 25px;
+}
+
+.scene-heading h1 {
+  font-size: clamp(30px, 4vw, 45px);
+}
+
+
+/* =====================================================
+   11. SIMULATION LAYOUT
+===================================================== */
+
+.simulation-grid {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 22px;
+  align-items: stretch;
+}
+
+
+/* =====================================================
+   12. INFORMATION CARD
+===================================================== */
+
+.information-card {
+  padding: 28px;
+
+  border: 1px solid #f0dce7;
+  border-radius: 25px;
+
+  background: rgba(255,255,255,.85);
+
+  box-shadow: 0 12px 35px #526b8510;
+}
+
+.information-card h2 {
+  font-size: 23px;
+  margin-bottom: 15px;
+}
+
+.information-card > p {
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+
+/* =====================================================
+   13. KEY POINT
+===================================================== */
+
+.keypoint {
+  margin-top: 25px;
+  padding: 17px;
+
+  border-radius: 16px;
+
+  background: linear-gradient(
+    110deg,
+    #fff0f6,
+    #eaf8ff
+  );
+}
+
+.keypoint strong {
+  display: block;
+
+  color: #bd6891;
+
+  font-size: 12px;
+  letter-spacing: 2px;
+
+  margin-bottom: 8px;
+}
+
+.keypoint p {
+  color: #52647a;
+  line-height: 1.6;
+}
+
+
+/* =====================================================
+   14. DNA SEQUENCE BOX
+===================================================== */
+
+.sequence-box {
+  margin-top: 18px;
+  padding: 17px;
+
+  border-radius: 14px;
+
+  background: #f8f5fb;
+  border: 1px solid #eee1ee;
+
+  font-family: Consolas, monospace;
+  font-size: 14px;
+
+  line-height: 2;
+
+  overflow-wrap: anywhere;
+}
+
+
+/* =====================================================
+   15. PROGRESS BAR
+===================================================== */
+
+.progress-area {
+  margin-top: 30px;
+
+  text-align: center;
+
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.progress-track {
+  height: 8px;
+
+  border-radius: 20px;
+
+  background: #eee5ed;
+
+  overflow: hidden;
+
+  margin-bottom: 10px;
+}
+
+#progressBar {
+  width: 7%;
+  height: 100%;
+
+  border-radius: 20px;
+
+  background: linear-gradient(
+    90deg,
+    #f2a0c0,
+    #77cdeb
+  );
+
+  transition: width .4s ease;
+}
+
+
+/* =====================================================
+   16. SCENE NAVIGATION
+===================================================== */
+
+.navigation {
+  display: flex;
+  justify-content: space-between;
+
+  gap: 12px;
+  margin-top: 25px;
+}
+
+
+/* =====================================================
+   17. SCENE MENU
+===================================================== */
+
+.scene-list {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 13px;
+  margin-top: 25px;
+}
+
+.scene-link {
+  padding: 17px;
+
+  background: white;
+
+  border: 1px solid #eedee8;
+  border-radius: 15px;
+
+  text-align: left;
+  color: var(--dark);
+
+  transition: .2s;
+}
+
+.scene-link:hover {
+  background: #fff0f6;
+  transform: translateY(-2px);
+}
+
+.scene-link strong {
+  display: block;
+  line-height: 1.5;
+}
+
+.scene-link small {
+  display: block;
+
+  color: var(--muted);
+  line-height: 1.5;
+
+  margin-top: 6px;
+}
+
+.back-home {
+  margin-top: 25px;
+}
+
+
+/* =====================================================
+   18. FOOTER
+===================================================== */
+
+footer {
+  text-align: center;
+
+  padding: 25px;
+
+  color: #8c9aaa;
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   19. RESPONSIVE DESIGN
+===================================================== */
+
+@media (max-width: 750px) {
+
+  .home-screen,
+  .simulation-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-screen {
+    padding-top: 20px;
+  }
+
+  .scene-list {
+    grid-template-columns: 1fr;
+  }
+
+  .dna-stage {
+    height: 300px;
+  }
+
+  .topbar {
+    padding: 17px 5%;
+  }
+
+  .container {
+    margin: 30px auto;
+  }
+
+  .information-card {
+    padding: 22px;
+  }
+
+  .scene-heading h1 {
+    font-size: 32px;
+  }
+
+  .dna-card {
+    padding: 16px;
+    border-radius: 24px;
+  }
+}
+
+
+/* =====================================================
+   20. SMALL MOBILE SCREENS
+===================================================== */
+
+@media (max-width: 400px) {
+
+  .logo {
+    font-size: 13px;
+  }
+
+  .menu-btn {
+    padding: 9px 14px;
+    font-size: 12px;
+  }
+
+  .intro h1 {
+    font-size: 34px;
+  }
+
+  .dna-stage {
+    height: 270px;
+  }
+
+  .navigation button {
+    padding: 11px 15px;
+    font-size: 12px;
+  }
+
+}
+
+
+/* =========================================
+   FIX: DNA ILLUSTRATION SIZE AND TEXT
+========================================= */
+
+/* Larger illustration area */
+.dna-stage {
+  height: 430px;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Make canvas occupy the entire stage */
+.dna {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.dna canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Give scene headings enough room */
+.scene-heading {
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+}
+
+.scene-heading h1 {
+  font-size: clamp(28px, 4vw, 45px);
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.scene-heading > p {
+  max-width: 850px;
+  line-height: 1.8;
+}
+
+/* Make information readable */
+.information-card {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.information-card p {
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+/* Make the two-illustration layout larger */
+.simulation-grid {
+  grid-template-columns: 1.1fr 1fr;
+  gap: 24px;
+}
+
+/* Mobile */
+@media (max-width: 750px) {
+  .dna-stage {
+    height: 380px;
+  }
+
+  .simulation-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .scene-heading h1 {
+    font-size: 30px;
+  }
+}
